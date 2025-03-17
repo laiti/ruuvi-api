@@ -20,7 +20,7 @@ export async function saveHistory({ ruuvi_id, datetime, temperature, humidity }:
 export async function getHistory(): Promise<object> {
 	try {
 		const history: object[] = await db('history')
-			.leftJoin('tag', 'tag.id', 'history.id')
+			.leftJoin('tag', 'tag.id', 'tag.id')
 			.select([ 'history.*', 'tag.name as tag_name' ])
 			.orderBy('history.datetime', 'DESC');
 			
