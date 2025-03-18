@@ -1,7 +1,7 @@
 import db from './src/config/database.ts';
 import http from 'http';
 
-import './index.js';
+import './index.ts';
 
 import * as tagModel from './src/models/tagModel.ts';
 import * as historyModel from './src/models/historyModel.ts';
@@ -59,8 +59,14 @@ await historyModel.saveHistory(
 console.log(await historyModel.getHistory());
 
 await fetch('http://localhost:8080/history')
-  .then(response => response.json())
-  .then(data => console.log(data))
-  .catch(error => console.error('Error:', error));
+	.then(response => response.json())
+	.then(data => console.log(data))
+	.catch(error => console.error('Error:', error));
+
+await fetch('http://localhost:8080/current')
+	.then(response => response.json())
+	.then(data => console.log(data))
+	.catch(error => console.error('Error:', error));
+
 
 process.exit();

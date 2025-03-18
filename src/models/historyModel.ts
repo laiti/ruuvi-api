@@ -31,6 +31,30 @@ export async function getHistory(): Promise<object> {
 	}
 }
 
+export async function getCurrentHistory(): Promise<object> {
+	try {
+		const current: object[] = await db('history')
+			.leftJoin('tag', 'history.tag_id', 'tag.id')
+			.join(
+				db('history')
+					.select('tag_id')
+					.max('datetime as max_datetime')
+					.groupBy('tag_id')
+					.as('latest'),
+				function () {
+					this.on('history.tag_id', '=', 'latest.tag_id')
+							.andOn('history.datetime', '=', 'latest.max_datetime');
+				}
+			)
+			.select('history.*', 'tag.name as tag_name');
+			
+			return current;
+	}
+	catch (error) {
+		throw error;
+	}
+}
+
 export async function cleanHistoryOlderThan(days) {
 	
 }

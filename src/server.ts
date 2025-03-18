@@ -1,5 +1,5 @@
 import express from 'express';
-import { historyGet, historyPost } from './controllers/historyController.ts';
+import { historyGet, historyPost, currentGet } from './controllers/historyController.ts';
 import * as dotenv from 'dotenv';
 dotenv.config();
 
@@ -10,6 +10,10 @@ app.use(express.json());
 
 app.get('/history', (req, res) => {
 	historyGet(req, res);
+});
+
+app.get('/current', (req, res) => {
+	currentGet(req, res);
 });
 
 app.post('/history', (req, res) => {

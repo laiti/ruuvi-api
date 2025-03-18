@@ -1,5 +1,5 @@
 import db from '../config/database.ts';
-import { saveHistory, getHistory } from '../models/historyModel.ts';
+import { saveHistory, getHistory, getCurrentHistory } from '../models/historyModel.ts';
 
 // Handle POST request.
 export async function historyPost(req: object, res: object): void {
@@ -23,6 +23,18 @@ export async function historyPost(req: object, res: object): void {
 export async function historyGet(req: object, res: object): void {
 	try {
 		const records: object[] = await getHistory();
+		res.json(records);
+	}
+	catch (error) {
+		console.error(error);
+		res.status(500).json({ error: 'Internal server error' });
+	}
+};
+
+// Handle GET request.
+export async function currentGet(req: object, res: object): void {
+	try {
+		const records: object[] = await getCurrentHistory();
 		res.json(records);
 	}
 	catch (error) {
