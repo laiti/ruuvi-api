@@ -72,7 +72,7 @@ app.get('/history', async (req, res) => {
 // GET /current - Fetch latest history data
 app.get('/current', async (req, res) => {
 	try {
-		const records = await getCurrentHistory({ tag_id });
+		const records = await getCurrentHistory();
 		res.json(records);
 	}
 	catch (error) {
