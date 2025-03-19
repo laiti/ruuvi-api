@@ -29,14 +29,9 @@ export async function ensureTag(ruuvi_id: string, name: string = null): Promise<
 	
 	// Check if the tag already exists. If not, create it.
 	if (!tag) {
-		try {
-			// Create and load the tag.
-			let tag_id: number = await insertTag(ruuvi_id, name);
-			tag = await getTagById(tag_id);
-		}
-		catch (error) {
-			throw error;
-		}
+		// Create and load the tag.
+		let tag_id: number = await insertTag(ruuvi_id, name);
+		tag = await getTagById(tag_id);
 	}
 	
 	// Return existing tag or newly reated one.
