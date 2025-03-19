@@ -9,9 +9,9 @@ import * as historyModel from '../src/models/historyModel.ts';
 
 console.log("Creating tags:");
 
-console.log(await tagModel.ensureTag("10:00:00:00:00:00", "Vessa"));
-console.log(await tagModel.ensureTag("20:00:00:00:00:00", "Olohuone"));
-console.log(await tagModel.ensureTag("30:00:00:00:00:00"));
+await tagModel.ensureTag("10:00:00:00:00:00", "Vessa");
+await tagModel.ensureTag("20:00:00:00:00:00", "Olohuone");
+await tagModel.ensureTag("30:00:00:00:00:00");
 
 console.log("Getting tags:");
 
@@ -50,6 +50,15 @@ await historyModel.saveHistory(
 
 await historyModel.saveHistory(
 	{
+		ruuvi_id: 2,
+		datetime: "2020-02-02T23:59:04+02:00",
+		temperature: 1.50,
+		humidity: 100
+	}
+);
+
+await historyModel.saveHistory(
+	{
 		ruuvi_id: 3,
 		datetime: "2019-03-01T02:02:04+02:00",
 		temperature: 25.03,
@@ -59,19 +68,22 @@ await historyModel.saveHistory(
 
 console.log(await historyModel.getHistory());
 
-const url = 'http://localhost:8080/history';
+console.log("Only 2020-02-02");
+console.log(await historyModel.getHistory("2020-02-02"));
 
-await fetch(url)
+const url = 'http://localhost:8080';
+
+await fetch(url + '/history')
 	.then(response => response.json())
 	.then(data => console.log(data))
 	.catch(error => console.error('Error:', error)
 );
 
-  // Read the JSON file
+  // Read GW data file.
   const jsonData = await fs.readFile('./test/ruuvi-gateway.json', 'utf-8');
 
-  // Send the POST request
-  const response = await fetch(url + "?format=ruuvi-gateway", {
+  // Send a POST request
+  const response = await fetch(url + "/history?format=ruuvi-gateway", {
       method: 'POST',
       headers: {
           'Content-Type': 'application/json'
@@ -82,7 +94,7 @@ await fetch(url)
 // Handle the response
 console.log(await response.json());
 
-await fetch(url)
+await fetch(url + "/history")
 	.then(response => response.json())
 	.then(data => console.log(data))
 	.catch(error => console.error('Error:', error)
