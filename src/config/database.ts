@@ -22,27 +22,27 @@ if (process.env.NODE_ENV === 'test') {
 // This will make sure the field "datetime" will be always returned in ISO format.
 config.postProcessResponse = (result) => {
 	const normalize = (row) => {
-				if (typeof row !== 'object' || row === null) return row;
+		if (typeof row !== 'object' || row === null) return row;
 
-				// Only modify 'datetime' if the row actually has it
-				if ('datetime' in row && row.datetime !== null) {
-					return { ...row, datetime: new Date(row.datetime) };
-				}
-			
-				return row;
-			};
+		// Only modify 'datetime' if the row actually has it
+		if ('datetime' in row && row.datetime !== null) {
+			return { ...row, datetime: new Date(row.datetime) };
+		}
+	
+		return row;
+	};
 
-			return Array.isArray(result) ? result.map(normalize) : normalize(result);
-		};
+	return Array.isArray(result) ? result.map(normalize) : normalize(result);
+};
 
 const db = knex(config);
 
-// Dummy database for testing.
 if (process.env.NODE_ENV === 'test') {
+	// Dummy database for testing.
 	await db.schema.createTable('tag', table => {
 		table.increments('id');
 		table.string('ruuvi_id');
-		table.string('name')
+		table.string('name');
 	});
 
 	await db.schema.createTable('history', table => {
