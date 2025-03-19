@@ -2,15 +2,42 @@ import db from '../config/database.ts';
 import { saveHistory, getHistory, getCurrentHistory } from '../models/historyModel.ts';
 
 // Handle POST request.
-export async function historyPost(req: object, res: object): void {
+export async function historyPost(req: object, res: object) {
 	try {
-		const { ruuvi_id, datetime, temperature, humidity }: object = req.body;
-		
-		if (!ruuvi_id || !datetime || !temperature || !humidity) {
-			return res.status(400).json({ error: 'Missing required fields' });
+		const { format }: string = req.query;
+		let historyEntries: object[] = [];
+
+		switch (format) {
+			case 'ruuvi-gateway': {
+				const { tags }: object[] = req.body.data;
+
+				if (!tags || typeof tags !== 'object') {
+					return res.status(400).json({ error: 'Invalid ruuvi-gateway payload' });
+				}
+
+				historyEntries = Object.values(tags).map(tag => ({
+					ruuvi_id: tag.id,
+					datetime: new Date(tag.timestamp * 1000).toISOString(),
+					temperature: tag.temperature,
+					humidity: tag.humidity,
+				}));
+				
+				break;
+			}
+			default: {
+				const { ruuvi_id, datetime, temperature, humidity }: object = req.body;
+
+				if (!ruuvi_id || !datetime || !temperature || !humidity) {
+					return res.status(400).json({ error: 'Missing required fields' });
+				}
+
+				historyEntries = [{ ruuvi_id, datetime, temperature, humidity }];
+			}
 		}
-		
-		await saveHistory({ ruuvi_id, datetime, temperature, humidity });
+
+		// Run all saveHistory calls concurrently
+		await Promise.all(historyEntries.map(entry => saveHistory(entry)));
+
 		res.status(201).json({ message: 'Data inserted successfully' });
 	}
 	catch (error) {

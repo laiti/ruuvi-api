@@ -1,10 +1,11 @@
-import db from './src/config/database.ts';
+import db from '../src/config/database.ts';
 import http from 'http';
+import fs from 'fs/promises';
 
-import './index.ts';
+import '../index.ts';
 
-import * as tagModel from './src/models/tagModel.ts';
-import * as historyModel from './src/models/historyModel.ts';
+import * as tagModel from '../src/models/tagModel.ts';
+import * as historyModel from '../src/models/historyModel.ts';
 
 console.log("Creating tags:");
 
@@ -58,15 +59,33 @@ await historyModel.saveHistory(
 
 console.log(await historyModel.getHistory());
 
-await fetch('http://localhost:8080/history')
+const url = 'http://localhost:8080/history';
+
+await fetch(url)
 	.then(response => response.json())
 	.then(data => console.log(data))
-	.catch(error => console.error('Error:', error));
+	.catch(error => console.error('Error:', error)
+);
 
-await fetch('http://localhost:8080/current')
+  // Read the JSON file
+  const jsonData = await fs.readFile('./test/ruuvi-gateway.json', 'utf-8');
+
+  // Send the POST request
+  const response = await fetch(url + "?format=ruuvi-gateway", {
+      method: 'POST',
+      headers: {
+          'Content-Type': 'application/json'
+      },
+      body: jsonData
+  });
+
+// Handle the response
+console.log(await response.json());
+
+await fetch(url)
 	.then(response => response.json())
 	.then(data => console.log(data))
-	.catch(error => console.error('Error:', error));
-
+	.catch(error => console.error('Error:', error)
+);
 
 process.exit();

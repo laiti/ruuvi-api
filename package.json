@@ -5,7 +5,7 @@
   "main": "index.ts",
   "scripts": {
     "start": "node index.ts --experimental-transform-types",
-    "test": "node test.ts --experimental-transform-types"
+    "test": "node ./test/test.ts --experimental-transform-types"
   },
   "author": "Joonas Kokko",
   "license": "ISC",
