@@ -22,6 +22,10 @@ export async function historyPost(req: object, res: object) {
 					humidity: tag.humidity,
 				}));
 				
+				if (!historyEntries) {
+					return res.status(400).json({ error: 'No valid history entries' });
+				}
+				
 				break;
 			}
 			default: {
