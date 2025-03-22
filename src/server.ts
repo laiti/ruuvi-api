@@ -29,16 +29,17 @@ app.post('/history', async (req, res) => {
 					datetime: new Date(tag.timestamp * 1000).toISOString(),
 					temperature: tag.temperature,
 					humidity: tag.humidity,
+					voltage: tag.voltage
 				}));
 				break;
 			}
 			default: {
-				const { ruuvi_id, datetime, temperature, humidity } = req.body;
+				const { ruuvi_id, datetime, temperature, humidity, battery_low } = req.body;
 				
-				if (!ruuvi_id || !datetime || !temperature || !humidity || !voltage) {
+				if (!ruuvi_id || !datetime || !temperature || !humidity || !battery_low) {
 					return res.status(400).json({ error: 'Missing required fields' });
 				}
-				historyEntries = [{ ruuvi_id, datetime, temperature, humidity, voltage }];
+				historyEntries = [{ ruuvi_id, datetime, temperature, humidity, battery_low }];
 			}
 		}
 

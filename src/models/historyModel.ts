@@ -1,7 +1,7 @@
 import db from '../config/database.ts';
 import { ensureTag } from '../models/tagModel.ts';
 
-export async function saveHistory({ ruuvi_id, datetime, temperature = null, humidity = null, voltage = null }): Promise<boolean> {
+export async function saveHistory({ ruuvi_id, datetime, temperature = null, humidity = null, voltage = null, battery_low = null }): Promise<boolean> {
 	// Datetime is in ISO format.
 	datetime = new Date(datetime);
 	
@@ -9,7 +9,9 @@ export async function saveHistory({ ruuvi_id, datetime, temperature = null, humi
 	const tag_id: number = (await ensureTag(ruuvi_id)).id;
 	
 	// Set battery low based on voltage.
-	const battery_low: boolean = voltage < 2.5;
+	if (voltage) {
+		battery_low = voltage < 2.5;
+	}
 	
 	// Insert into history. Use tag ID here instead of Ruuvi ID.
 	await db('history').insert({ tag_id, datetime, temperature, humidity, battery_low });
