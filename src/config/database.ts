@@ -51,6 +51,7 @@ if (process.env.NODE_ENV === 'test') {
 		table.dateTime('datetime').notNullable();
 		table.float('temperature');
 		table.float('humidity');
+		table.boolean('battery_low');
 	});
 }
 

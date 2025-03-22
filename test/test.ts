@@ -66,7 +66,13 @@ await historyModel.saveHistory(
 	}
 );
 
-console.log(await historyModel.getHistory());
+try {
+	console.log(await historyModel.getHistory());
+}
+catch (error) {
+	console.error(error);
+}
+
 
 console.log("Only 2020-02-02");
 console.log(await historyModel.getHistory("2020-02-02"));
