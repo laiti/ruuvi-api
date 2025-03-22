@@ -52,33 +52,36 @@ app.post('/history', async (req, res) => {
 		res.status(201).json({ message: 'Data inserted successfully' });
 	}
 	catch (error) {
-		console.error(error);
-		res.status(500).json({ error: 'Internal server error' });
+		next(error);
 	}
 });
 
 // GET /history - Fetch history data
-app.get('/history', async (req, res) => {
+app.get('/history', async (req, res, next) => {
 	try {
 		const records = await getHistory();
 		res.json(records);
 	}
 	catch (error) {
-		console.error(error);
-		res.status(500).json({ error: 'Internal server error' });
+		next(error);
 	}
 });
 
 // GET /current - Fetch latest history data
-app.get('/current', async (req, res) => {
+app.get('/current', async (req, res, next) => {
 	try {
 		const records = await getCurrentHistory();
 		res.json(records);
 	}
 	catch (error) {
-		console.error(error);
-		res.status(500).json({ error: 'Internal server error' });
+		next(error);
 	}
+});
+
+app.use((err, req, res, next) => {
+	console.error(err);
+	res.status(500);
+	res.json({ error: "Something went wrong." });
 });
 
 app.listen(PORT, () => {
