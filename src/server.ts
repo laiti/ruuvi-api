@@ -35,10 +35,10 @@ app.post('/history', async (req, res) => {
 			default: {
 				const { ruuvi_id, datetime, temperature, humidity } = req.body;
 				
-				if (!ruuvi_id || !datetime || !temperature || !humidity) {
+				if (!ruuvi_id || !datetime || !temperature || !humidity || !voltage) {
 					return res.status(400).json({ error: 'Missing required fields' });
 				}
-				historyEntries = [{ ruuvi_id, datetime, temperature, humidity }];
+				historyEntries = [{ ruuvi_id, datetime, temperature, humidity, voltage }];
 			}
 		}
 
