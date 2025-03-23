@@ -27,7 +27,7 @@ services:
       - "443:443"
       - "443:443/udp" # HTTP/3 is UDP
     volumes:
-      - ./Caddyfile:/etc/caddy/Caddyfile
+      - ./caddy/Caddyfile:/etc/caddy/Caddyfile
       - ./caddy/data:/data
       - ./caddy/config:/config
     networks:

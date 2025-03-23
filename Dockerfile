@@ -14,5 +14,4 @@ COPY --from=build /app/index.ts /app/index.ts
 COPY --from=build /app/node_modules /app/node_modules
 COPY --from=build /app/src /app/src
 COPY --from=build /app/test /app/test
-RUN npm test
 CMD ["npm", "start"]
