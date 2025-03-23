@@ -9,7 +9,7 @@ FROM node:23-alpine as production
 
 WORKDIR /app
 COPY package*.json /app/
-RUN npm ci --omit=dev 
+RUN npm ci --omit=dev
 COPY --from=build /app/index.ts /app/index.ts
 COPY --from=build /app/node_modules /app/node_modules
 COPY --from=build /app/src /app/src

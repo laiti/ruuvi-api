@@ -54,7 +54,7 @@ services:
       ruuvi-api:
         aliases:
           - ruuvi-api
-      
+
 networks:
   mysql:
   ruuvi-api:
