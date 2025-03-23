@@ -1,39 +1,23 @@
-version: 3.7
+version: "3.7"
 
 services:
-  ruuvi-api:
-    build: ../ruuvi-api
-    container_name: ruuvi-api
+  mysql:
+    image: mysql:9.2
     restart: always
-    # API is open for Caddy
     expose:
-     - 8080
+      - 3306
+    ports:
+      - "127.0.0.1:3306:3306" # For connections from Docker host
     environment:
-      DB_HOST: mysql
-      DB_USER: ruuvi
-      DB_PASSWORD: ${MYSQL_ROOT_PASSWORD}
-      DB_NAME: ruuvi
-      SERVER_PORT: 8080
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+
     networks:
       mysql:
         aliases:
-          - ruuvi-api
-      ruuvi-api:
-        aliases:
-          - ruuvi-api
-  mysql:
-      image: mysql-9.2
-      restart: always
-      expose:
-        - 3306
-      ports:
-        - "127.0.0.1:3306:3306" # For connections from Docker host
-      environment:
-        MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
-      networks:
-        mysql:
-          aliases:
-            - mysql
+          - mysql
   caddy:
     image: caddy:latest
     container_name: caddy
@@ -49,7 +33,27 @@ services:
     networks:
       ruuvi-api:
     environment:
-      - SERVER_DOMAIN: ${SERVER_DOMAIN}
+      SERVER_DOMAIN: ${SERVER_DOMAIN}
+  ruuvi-api:
+    build: ../ruuvi-api
+    container_name: ruuvi-api
+    restart: always
+    # API is open for Caddy
+    expose:
+     - 8080
+    environment:
+      DB_HOST: mysql
+      DB_USER: ${MYSQL_USER}
+      DB_PASSWORD: ${MYSQL_PASSWORD}
+      DB_NAME: ${MYSQL_DATABASE}
+      SERVER_PORT: 8080
+    networks:
+      mysql:
+        aliases:
+          - ruuvi-api
+      ruuvi-api:
+        aliases:
+          - ruuvi-api
       
 networks:
   mysql:
