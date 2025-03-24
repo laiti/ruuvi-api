@@ -1,4 +1,5 @@
 import knex from 'knex';
+import { installSchema } from './database.schema.ts';
 import * as dotenv from 'dotenv';
 
 dotenv.config();
@@ -42,22 +43,8 @@ config.postProcessResponse = (result) => {
 
 const db = knex(config);
 
-if (process.env.NODE_ENV === 'test') {
-	// Dummy database for testing.
-	await db.schema.createTable('tag', table => {
-		table.increments('id');
-		table.string('ruuvi_id');
-		table.string('name');
-	});
 
-	await db.schema.createTable('history', table => {
-		table.increments('id');
-		table.integer('tag_id');
-		table.dateTime('datetime').notNullable();
-		table.float('temperature');
-		table.float('humidity');
-		table.boolean('battery_low');
-	});
-}
+// Install schema.
+await installSchema(db);
 
 export default db;
