@@ -7,6 +7,7 @@ COPY . .
 
 FROM node:23-alpine as production
 
+EXPOSE 8080/tcp
 WORKDIR /app
 COPY package*.json /app/
 RUN npm ci --omit=dev
