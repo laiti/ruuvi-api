@@ -19,12 +19,12 @@ if (process.env.NODE_ENV === 'test') {
 	config.useNullAsDefault = true;
 }
 
-// This will make sure the field "datetime" will be always returned in ISO format.
+// Some fields need post processing. This will go through all rows that are coming from the database.
 config.postProcessResponse = (result) => {
 	const normalize = (row) => {
 		if (typeof row !== 'object' || row === null) return row;
 
-		// Only modify 'datetime' if the row actually has it
+		// Modify datetime to be a date. This is because sqlite stores it as an integer timestamp.
 		if ('datetime' in row && row.datetime !== null) {
 			row.datetime = new Date(row.datetime);
 		}
