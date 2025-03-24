@@ -17,10 +17,24 @@ app.post('/history', async (req, res) => {
 		let historyEntries = [];
 
 		switch (format) {
-			case 'ruuvi-gateway': {
+			// Own, custom format that matches the tag model.
+			case 'ruuvi-api': {
+				const { ruuvi_id, datetime, temperature, humidity, battery_low } = req.body;
+
+				if (!ruuvi_id || !datetime || !temperature || !humidity || !battery_low) {
+					return res.status(400).json({ error: 'Missing required fields' });
+				}
+				historyEntries = [{ ruuvi_id, datetime, temperature, humidity, battery_low }];
+			}
+
+			default: {
 				const tags = req.body?.data?.tags;
 				
-				if (!tags || typeof tags !== 'object') {
+				// This is Ruuvi GW's test call in the wizard.
+				if (typeof tags === 'object' && Object.keys(tags).length === 0) {
+					return res.status(200).json({ message: 'Connection working without tag data.'});
+				}
+				else if (!tags || typeof tags !== 'object') {
 					return res.status(400).json({ error: 'Invalid ruuvi-gateway payload' });
 				}
 
@@ -32,14 +46,6 @@ app.post('/history', async (req, res) => {
 					voltage: tag.voltage
 				}));
 				break;
-			}
-			default: {
-				const { ruuvi_id, datetime, temperature, humidity, battery_low } = req.body;
-				
-				if (!ruuvi_id || !datetime || !temperature || !humidity || !battery_low) {
-					return res.status(400).json({ error: 'Missing required fields' });
-				}
-				historyEntries = [{ ruuvi_id, datetime, temperature, humidity, battery_low }];
 			}
 		}
 
