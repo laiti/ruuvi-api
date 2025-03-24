@@ -1,3 +1,11 @@
+-- Create syntax for TABLE 'tag'
+CREATE TABLE `tag` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `ruuvi_id` varchar(32) DEFAULT NULL,
+  `name` varchar(64) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
 -- Create syntax for TABLE 'history'
 CREATE TABLE `history` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
@@ -27,12 +35,4 @@ CREATE TABLE `history_longterm` (
   PRIMARY KEY (`id`),
   KEY `tag_id` (`tag_id`),
   CONSTRAINT `history_longterm_ibfk_1` FOREIGN KEY (`tag_id`) REFERENCES `tag` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
--- Create syntax for TABLE 'tag'
-CREATE TABLE `tag` (
-  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-  `ruuvi_id` varchar(32) DEFAULT NULL,
-  `name` varchar(64) DEFAULT NULL,
-  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
