@@ -1,6 +1,9 @@
 // Create tables if they don't exist'
-export async function installSchema(db) {
+export async function installSchema(db: object): void {
+	console.log("Ensuring database schema...");
+
 	if (!(await db.schema.hasTable('tag'))) {
+		console.log("Creating tag table");
 		await db.schema.createTable('tag', (table) => {
 			table.increments('id').unsigned().primary();
 			table.string('ruuvi_id', 32).nullable();
@@ -9,6 +12,7 @@ export async function installSchema(db) {
 	}
 
 	if (!(await db.schema.hasTable('history'))) {
+		console.log("Creating history table");
 		await db.schema.createTable('history', (table) => {
 			table.increments('id').unsigned().primary();
 			table.integer('tag_id').unsigned().nullable().index();
@@ -22,6 +26,7 @@ export async function installSchema(db) {
 	}
 
 	if (!(await db.schema.hasTable('history_longterm'))) {
+		console.log("Creating history_longterm table");
 		await db.schema.createTable('history_longterm', (table) => {
 			table.increments('id').unsigned().primary();
 			table.integer('tag_id').unsigned().nullable().index();
@@ -38,4 +43,6 @@ export async function installSchema(db) {
 			table.foreign('tag_id').references('id').inTable('tag').onDelete('NO ACTION').onUpdate('NO ACTION');
 		});
 	}
+
+	console.log("Database schema ensured.");
 }
