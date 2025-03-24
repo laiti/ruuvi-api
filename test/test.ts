@@ -26,7 +26,8 @@ await historyModel.saveHistory(
 		ruuvi_id: 1,
 		datetime: "2020-02-02T02:02:02+02:00",
 		temperature: 15.20,
-		humidity: 73.11
+		humidity: 73.11,
+		battery_low: false
 	}
 );
 
@@ -35,7 +36,8 @@ await historyModel.saveHistory(
 		ruuvi_id: 2,
 		datetime: "2020-02-02T02:02:04+02:00",
 		temperature: 17.30,
-		humidity: 80.13
+		humidity: 80.13,
+		battery_low: false
 	}
 );
 
@@ -44,7 +46,8 @@ await historyModel.saveHistory(
 		ruuvi_id: 2,
 		datetime: "2020-02-01T02:02:04+02:00",
 		temperature: 1.50,
-		humidity: 100
+		humidity: 100,
+		battery_low: false
 	}
 );
 
@@ -53,7 +56,8 @@ await historyModel.saveHistory(
 		ruuvi_id: 2,
 		datetime: "2020-02-02T23:59:04+02:00",
 		temperature: 1.50,
-		humidity: 100
+		humidity: 100,
+		battery_low: true
 	}
 );
 
@@ -62,7 +66,8 @@ await historyModel.saveHistory(
 		ruuvi_id: 3,
 		datetime: "2019-03-01T02:02:04+02:00",
 		temperature: 25.03,
-		humidity: 1.15151
+		humidity: 1.15151,
+		battery_low: false
 	}
 );
 
@@ -85,20 +90,31 @@ await fetch(url + '/history')
 	.catch(error => console.error('Error:', error)
 );
 
-  // Read GW data file.
-  const jsonData = await fs.readFile('./test/ruuvi-gateway.json', 'utf-8');
+// Read GW data files.
+const ruuviGwPayload = await fs.readFile('./test/ruuvi-gateway.json', 'utf-8');
+const ruuviGwPayloadWizard = await fs.readFile('./test/ruuvi-gateway-wizard.json', 'utf-8');
 
-  // Send a POST request
-  const response = await fetch(url + "/history?format=ruuvi-gateway", {
-      method: 'POST',
-      headers: {
-          'Content-Type': 'application/json'
-      },
-      body: jsonData
-  });
+// Send a POST request
+const gwResponse = await fetch(url + "/history", {
+    method: 'POST',
+    headers: {
+        'Content-Type': 'application/json'
+    },
+    body: ruuviGwPayload
+});
 
-// Handle the response
-console.log(await response.json());
+console.log(await gwResponse.json());
+
+// Send a POST request
+const gwResponseWizard = await fetch(url + "/history", {
+    method: 'POST',
+    headers: {
+        'Content-Type': 'application/json'
+    },
+    body: ruuviGwPayloadWizard
+});
+
+console.log(await gwResponseWizard.json());
 
 await fetch(url + "/history")
 	.then(response => response.json())
