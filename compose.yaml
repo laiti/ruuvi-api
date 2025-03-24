@@ -6,8 +6,6 @@ services:
     restart: always
     expose:
       - 3306
-    ports:
-      - "127.0.0.1:3306:3306" # For connections from Docker host
     environment:
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
       MYSQL_DATABASE: ${MYSQL_DATABASE}
@@ -20,7 +18,8 @@ services:
 
     volumes:
       - db:/var/lib/mysql
-      - ./schema.mysql.sql:/docker-entrypoint-initdb.d/schema.mysql.sql
+      - ./schema.mysql.sql:/docker-entrypoint-initdb.d/schema.mysql.sql # Apply MySQL schema on startup
+
   ruuvi-api:
     build: .
     container_name: ruuvi-api
