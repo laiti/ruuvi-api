@@ -26,7 +26,13 @@ config.postProcessResponse = (result) => {
 
 		// Only modify 'datetime' if the row actually has it
 		if ('datetime' in row && row.datetime !== null) {
-			return { ...row, datetime: new Date(row.datetime) };
+			row.datetime = new Date(row.datetime);
+		}
+		
+		// Convert battery low from tinyint to boolean because MySQL ynnyms.
+		if ('battery_low' in row && row.battery_low !== null) {
+			console.log("battery low");
+			row.battery_low = Boolean(row.battery_low);
 		}
 	
 		return row;
