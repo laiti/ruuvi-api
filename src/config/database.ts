@@ -31,7 +31,6 @@ config.postProcessResponse = (result) => {
 		
 		// Convert battery low from tinyint to boolean because MySQL ynnyms.
 		if ('battery_low' in row && row.battery_low !== null) {
-			console.log("battery low");
 			row.battery_low = Boolean(row.battery_low);
 		}
 	
