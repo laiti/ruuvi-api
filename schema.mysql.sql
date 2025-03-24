@@ -5,7 +5,7 @@ CREATE TABLE `history` (
   `datetime` datetime DEFAULT NULL,
   `temperature` float DEFAULT NULL,
   `humidity` float DEFAULT NULL,
-	`battery_low` tinyint(1) DEFAULT NULL,
+  `battery_low` tinyint(1) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `ruuvi_id` (`tag_id`),
   CONSTRAINT `history_ibfk_1` FOREIGN KEY (`tag_id`) REFERENCES `tag` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
