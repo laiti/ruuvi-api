@@ -10,7 +10,7 @@ const PORT: number = process.env.SERVER_PORT;
 app.use(express.json());
 
 // POST /history - Save history data
-app.post('/history', async (req, res) => {
+app.post('/history', async (req, res, next) => {
 	try {
 		const { format } = req.query;
 		
