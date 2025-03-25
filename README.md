@@ -17,4 +17,4 @@ DB_NAME="ruuvi"
 SERVER_PORT="8080"
 ```
 
-Start with `$ npm start`.
+Start with `$ npm start`. First time running will create the database table schema.
