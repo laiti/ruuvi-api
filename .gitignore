@@ -5,7 +5,6 @@ npm-debug.log*
 
 # dotenv environment variable files
 .env
-.env.*
 
 # Bölö
 .DS_Store
